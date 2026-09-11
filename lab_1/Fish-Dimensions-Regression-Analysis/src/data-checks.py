@@ -22,7 +22,7 @@ def main():
     check_consistency(df)
     check_disbalance(df)
     check_almost_identical_rows(df)
-
+    check_unique_rows(df)
 
     
 
@@ -80,7 +80,10 @@ def check_almost_identical_rows(df):
                 print(f"Строки {i} и {j} почти идентичны:")
                 print(df.loc[[i, j]])
                 
-
+def check_unique_rows(df):
+    unique_rows = df.drop_duplicates()
+    print(f"Уникалные строки в датафрейме: (Число {len(unique_rows)})")
+    print(unique_rows) #.to_string(index=False)
 
 if __name__ == "__main__":
     main()
