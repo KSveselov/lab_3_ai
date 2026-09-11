@@ -85,6 +85,8 @@ def check_unique_rows(df):
     print(f"Уникалные строки в датафрейме: (Число {len(unique_rows)})")
     print(unique_rows) #.to_string(index=False)
 
+
+
 if __name__ == "__main__":
     main()
 
