@@ -15,25 +15,53 @@ def main():
     "missing": df.isna().sum(),
     "unique": df.nunique(dropna=False),
     })
-
+    print(quality)
     check_data(df)
     check_consistency(df)
+    check_disbalance(df)
 
-    print(quality)
+    
 
 def check_data(df):
     size = df.shape
+    numbers = df.select_dtypes(include=["number"])
     print("Число строк:", size[0], "Число столбцов:", size[1])
-    print("Число дубликатов:", df.duplicated().sum())
-    print("Число пропущенных значений:", df.isna().sum().sum())
-    print("Число бесконечных значений:", (df == float("inf")).sum().sum())
-    print("Число отрицательных значений:", (df < 0).sum().sum())
-    print("Число нулевых значений:", (df == 0).sum().sum())
+    print("Число дубликатов:", numbers.duplicated().sum())
+    print("Число пропущенных значений:", numbers.isna().sum().sum())
+    print("Число бесконечных значений:", (numbers == float("inf")).sum().sum())
+    print("Число отрицательных значений:", (numbers < 0).sum().sum())
+    print("Число нулевых значений:", (numbers == 0).sum().sum())
 
 def check_consistency(df):
-    
+    dimensions = ["Length1", "Length2", "Length3", "Height", "Width"]
 
+    non_positive = df[dimensions].le(0).any(axis=1)
 
+    wrong_order = ~(
+        (df["Length1"] <= df["Length2"]) 
+        & (df["Length2"] <= df["Length3"])
+    )
+
+    print("Число строк с неположительными значениями в измерениях:", non_positive.sum())
+    print("Число строк с неправильным порядком значений (Length1 ≤ Length2 ≤ Length3):", wrong_order.sum())
+
+    if non_positive.any():
+        print("Строки с неположительными значениями в измерениях:")
+        print(df[non_positive])
+
+    if wrong_order.any():
+        print("Строки с неправильным порядком значений (Length1 ≤ Length2 ≤ Length3):")
+        print(df[wrong_order])
+
+def check_disbalance(df):
+    species_counts = df["Species"].value_counts()
+    print("Доля экземпляров каждого вида:")
+    for species, count in species_counts.items():
+        proportion = count / len(df)
+        print(f"{species}: {proportion:.2%} ({count} экземпляров)")
+
+    imbalance_rate = species_counts.max() / species_counts.min()
+    print(f"Коэффициент дисбаланса: {imbalance_rate:.2f}")
 
 if __name__ == "__main__":
     main()
