@@ -1,6 +1,8 @@
 from pathlib import Path
 import pandas as pd
+import numpy as np
 
+dimensions = ["Length1", "Length2", "Length3", "Height", "Width"]
 
 def main():
     DATA_PATH = Path("../assets/data/Fish.csv")
@@ -19,6 +21,8 @@ def main():
     check_data(df)
     check_consistency(df)
     check_disbalance(df)
+    check_almost_identical_rows(df)
+
 
     
 
@@ -33,7 +37,7 @@ def check_data(df):
     print("Число нулевых значений:", (numbers == 0).sum().sum())
 
 def check_consistency(df):
-    dimensions = ["Length1", "Length2", "Length3", "Height", "Width"]
+    
 
     non_positive = df[dimensions].le(0).any(axis=1)
 
@@ -62,6 +66,21 @@ def check_disbalance(df):
 
     imbalance_rate = species_counts.max() / species_counts.min()
     print(f"Коэффициент дисбаланса: {imbalance_rate:.2f}")
+
+
+
+def check_almost_identical_rows(df):
+
+    close_rows = None
+    for i  in range(len(df)):
+        for j in range(i + 1, len(df)):
+            close_rows = np.isclose(df.loc[i, dimensions].to_numpy(dtype=float), df.loc[j, dimensions].to_numpy(dtype=float), rtol=0.01, atol=0.01).all()
+
+            if close_rows:
+                print(f"Строки {i} и {j} почти идентичны:")
+                print(df.loc[[i, j]])
+                
+
 
 if __name__ == "__main__":
     main()
