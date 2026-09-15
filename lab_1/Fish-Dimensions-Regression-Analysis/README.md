@@ -1,5 +1,32 @@
 # Fish Dimensions Regression Analysis
 
+## Запуск проекта
+
+Проект рассчитан на Python 3.7.  Для Python 3.7 используется `pip` версии ниже 24.1.
+
+```bash
+cd lab_1/Fish-Dimensions-Regression-Analysis
+python3.7 -m venv env
+source env/bin/activate
+python -m pip install --upgrade "pip<24.1"
+pip install -r requirements.txt
+```
+
+Проверить исходные данные:
+
+```bash
+python src/data-checks.py
+```
+
+Запустить Web-приложение:
+
+```bash
+cd ..
+python run.py
+```
+
+После запуска откройте адрес(`http://127.0.0.1:8050/`).
+
 ### Introduction
 
 The Fish Dimension Regression Analysis repo aims to perform statistical analysis on the given fish market dataset. The analysis involves hypothesis testing and performing a multi-dimensional linear regression on the dataset.
