@@ -83,7 +83,7 @@ def check_almost_identical_rows(df):
 def check_unique_rows(df):
     unique_rows = df.drop_duplicates()
     print(f"Уникалные строки в датафрейме: (Число {len(unique_rows)})")
-    print(unique_rows) #.to_string(index=False)
+    print(unique_rows) 
 
 
 
