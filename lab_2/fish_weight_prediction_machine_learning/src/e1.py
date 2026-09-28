@@ -12,6 +12,23 @@ from config import GRAF_PATH, TARGET_COLUMN, NUMERIC_COLUMNS, CATEGORICAL_COLUMN
 
 
 
+def prepare():
+    numeric_pipeline = Pipeline([
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ])
+    
+    categorical_pipeline = Pipeline([
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("encoder", OneHotEncoder(handle_unknown="ignore")),
+    ])
+
+    preprocess = ColumnTransformer([
+        ("numeric", numeric_pipeline, NUMERIC_COLUMNS),
+        ("categorical", categorical_pipeline, CATEGORICAL_COLUMNS),
+    ])
+    return preprocess
+
 def main():
     train_df, test_df = load_data()
 
@@ -22,20 +39,7 @@ def main():
     x_test = test_df[feature_columns]
     y_test = test_df[TARGET_COLUMN]
 
-    numeric_pipeline = Pipeline([
-        ("imputer", SimpleImputer(strategy="median")),
-        ("scaler", StandardScaler()),
-    ])
-
-    categorical_pipeline = Pipeline([
-        ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("encoder", OneHotEncoder(handle_unknown="ignore")),
-    ])
-
-    preprocess = ColumnTransformer([
-        ("numeric", numeric_pipeline, NUMERIC_COLUMNS),
-        ("categorical", categorical_pipeline, CATEGORICAL_COLUMNS),
-    ])
+    preprocess = prepare()
 
     model = Pipeline([
         ("preprocess", preprocess),

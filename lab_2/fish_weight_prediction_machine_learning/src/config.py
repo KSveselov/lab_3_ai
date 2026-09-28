@@ -7,3 +7,4 @@ TARGET_COLUMN = "Weight"
 NUMERIC_COLUMNS = ["Length3", "Height", "Width"]
 CATEGORICAL_COLUMNS = ["Species"]
 GRAF_PATH = PROJECT_DIR / "graf"
+SEED = 42

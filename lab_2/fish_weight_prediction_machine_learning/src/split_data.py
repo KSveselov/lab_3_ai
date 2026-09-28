@@ -7,9 +7,9 @@ from sklearn.linear_model import Ridge
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from config import DATA_PATH, DATA_SPLIT
+from config import DATA_PATH, DATA_SPLIT, SEED
 
-SEED = 42
+
 
 df = pd.read_csv(DATA_PATH)
 
