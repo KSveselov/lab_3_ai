@@ -9,22 +9,17 @@ from e1 import prepare
 from split_data import load_data
 
 
-
-
-def main():
+def train_and_predict():
     train_df, test_df = load_data()
     feature_columns = NUMERIC_COLUMNS + CATEGORICAL_COLUMNS
-
     x_train = train_df[feature_columns]
     y_train = train_df[TARGET_COLUMN]
     x_test = test_df[feature_columns]
     y_test = test_df[TARGET_COLUMN]
-
     model = Pipeline([
         ("preprocess", prepare()),
         ("regressor", Ridge()),
     ])
-
     search = GridSearchCV(
         estimator=model,
         param_grid={"regressor__alpha": [0.01, 0.1, 1, 10, 100]},
@@ -33,8 +28,11 @@ def main():
         n_jobs=-1,
     )
     search.fit(x_train, y_train)
+    return search, y_test, search.best_estimator_.predict(x_test)
 
-    predictions = search.best_estimator_.predict(x_test)
+
+def main():
+    search, y_test, predictions = train_and_predict()
 
     best_index = search.best_index_
     cv_mse = -search.cv_results_["mean_test_score"][best_index]

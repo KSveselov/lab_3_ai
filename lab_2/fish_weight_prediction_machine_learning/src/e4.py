@@ -25,7 +25,7 @@ def add_vproxy(data_frame):
     )
 
 
-def evaluate(train_df, test_df, numeric_columns, label):
+def _train_and_predict(train_df, test_df, numeric_columns):
     feature_columns = numeric_columns + CATEGORICAL_COLUMNS
     model = Pipeline(
         [
@@ -46,30 +46,39 @@ def evaluate(train_df, test_df, numeric_columns, label):
     )
     search.fit(train_df[feature_columns], train_df[TARGET_COLUMN])
     predictions = search.best_estimator_.predict(test_df[feature_columns])
+    return search, predictions
 
-    print(f"\n{label}")
-    print(f"Лучшие параметры: {search.best_params_}")
-    print(f"CV MSE: {-search.best_score_:.3f}")
-    print(f"Test MSE: {mean_squared_error(test_df[TARGET_COLUMN], predictions):.3f}")
-    print(f"Test MAE: {mean_absolute_error(test_df[TARGET_COLUMN], predictions):.3f}")
-    print(f"Test R²: {r2_score(test_df[TARGET_COLUMN], predictions):.3f}")
+
+def train_and_predict():
+    train_df, test_df = load_data()
+    baseline_search, baseline_predictions = _train_and_predict(
+        train_df, test_df, NUMERIC_COLUMNS
+    )
+    vproxy_test_df = add_vproxy(test_df)
+    vproxy_search, vproxy_predictions = _train_and_predict(
+        add_vproxy(train_df),
+        vproxy_test_df,
+        NUMERIC_COLUMNS + [VPROXY_COLUMN],
+    )
+    return (
+        ("Версия A: базовые признаки", test_df, baseline_search, baseline_predictions),
+        ("Версия B: базовые признаки + Vproxy", vproxy_test_df, vproxy_search, vproxy_predictions),
+    )
 
 
 def main():
-    train_df, test_df = load_data()
-
     print("Вопрос: улучшает ли Vproxy = Length3 × Height × Width прогноз массы?")
     print(
         "Бюджет: "
         f"{SEARCH_FITS_PER_VERSION} CV-обучений + итоговое обучение на версию."
     )
-    evaluate(train_df, test_df, NUMERIC_COLUMNS, "Версия A: базовые признаки")
-    evaluate(
-        add_vproxy(train_df),
-        add_vproxy(test_df),
-        NUMERIC_COLUMNS + [VPROXY_COLUMN],
-        "Версия B: базовые признаки + Vproxy",
-    )
+    for label, test_df, search, predictions in train_and_predict():
+        print(f"\n{label}")
+        print(f"Лучшие параметры: {search.best_params_}")
+        print(f"CV MSE: {-search.best_score_:.3f}")
+        print(f"Test MSE: {mean_squared_error(test_df[TARGET_COLUMN], predictions):.3f}")
+        print(f"Test MAE: {mean_absolute_error(test_df[TARGET_COLUMN], predictions):.3f}")
+        print(f"Test R²: {r2_score(test_df[TARGET_COLUMN], predictions):.3f}")
 
 
 if __name__ == "__main__":

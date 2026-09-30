@@ -13,20 +13,17 @@ N_CANDIDATES = 4
 SEARCH_FITS = CV_SPLITS * N_CANDIDATES
 
 
-def main():
+def train_and_predict():
     train_df, test_df = load_data()
     feature_columns = NUMERIC_COLUMNS + CATEGORICAL_COLUMNS
-
     x_train = train_df[feature_columns]
     y_train = train_df[TARGET_COLUMN]
     x_test = test_df[feature_columns]
     y_test = test_df[TARGET_COLUMN]
-
     model = Pipeline([
         ("preprocess", prepare()),
         ("regressor", RandomForestRegressor(random_state=SEED, n_jobs=2)),
     ])
-
     search = GridSearchCV(
         estimator=model,
         param_grid={
@@ -39,8 +36,11 @@ def main():
         n_jobs=2,
     )
     search.fit(x_train, y_train)
+    return search, y_test, search.best_estimator_.predict(x_test)
 
-    predictions = search.best_estimator_.predict(x_test)
+
+def main():
+    search, y_test, predictions = train_and_predict()
 
     print(f"Бюджет поиска: {SEARCH_FITS} CV-обучений + итоговое обучение")
     print(f"Лучшие параметры: {search.best_params_}")

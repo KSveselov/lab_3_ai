@@ -28,28 +28,26 @@ def prepare(numeric_columns=NUMERIC_COLUMNS):
     ])
     return preprocess
 
-def main():
-    import matplotlib.pyplot as plt
 
+def train_and_predict():
     train_df, test_df = load_data()
-
     feature_columns = NUMERIC_COLUMNS + CATEGORICAL_COLUMNS
-
     x_train = train_df[feature_columns]
     y_train = train_df[TARGET_COLUMN]
     x_test = test_df[feature_columns]
     y_test = test_df[TARGET_COLUMN]
-
-    preprocess = prepare()
-
     model = Pipeline([
-        ("preprocess", preprocess),
+        ("preprocess", prepare()),
         ("regressor", LinearRegression()),
     ])
-
     model.fit(x_train, y_train)
+    return train_df, y_test, model.predict(x_test)
 
-    predictions = model.predict(x_test)
+
+def main():
+    import matplotlib.pyplot as plt
+
+    train_df, y_test, predictions = train_and_predict()
     residuals = y_test - predictions
 
     print(f"MSE: {mean_squared_error(y_test, predictions):.3f}")
