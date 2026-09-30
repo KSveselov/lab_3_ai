@@ -1,66 +1,22 @@
-import json
-
-import pandas as pd
-from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from config import (
     CATEGORICAL_COLUMNS,
-    DATA_PATH,
-    DATA_SPLIT,
     NUMERIC_COLUMNS,
     SEED,
     TARGET_COLUMN,
 )
+from e1 import prepare
+from split_data import load_data
 
 
 CV_SPLITS = 5
 N_CANDIDATES = 4
 SEARCH_FITS_PER_VERSION = CV_SPLITS * N_CANDIDATES
 VPROXY_COLUMN = "Vproxy"
-
-
-def load_fixed_split():
-    data_frame = pd.read_csv(DATA_PATH)
-    with DATA_SPLIT.open(encoding="utf-8") as file:
-        split_indices = json.load(file)
-
-    return (
-        data_frame.loc[split_indices["train_index"]].copy(),
-        data_frame.loc[split_indices["test_index"]].copy(),
-    )
-
-
-def make_preprocessor(numeric_columns):
-    return ColumnTransformer(
-        [
-            (
-                "numeric",
-                Pipeline(
-                    [
-                        ("imputer", SimpleImputer(strategy="median")),
-                        ("scaler", StandardScaler()),
-                    ]
-                ),
-                numeric_columns,
-            ),
-            (
-                "categorical",
-                Pipeline(
-                    [
-                        ("imputer", SimpleImputer(strategy="most_frequent")),
-                        ("encoder", OneHotEncoder(handle_unknown="ignore")),
-                    ]
-                ),
-                CATEGORICAL_COLUMNS,
-            ),
-        ]
-    )
 
 
 def add_vproxy(data_frame):
@@ -73,7 +29,7 @@ def evaluate(train_df, test_df, numeric_columns, label):
     feature_columns = numeric_columns + CATEGORICAL_COLUMNS
     model = Pipeline(
         [
-            ("preprocess", make_preprocessor(numeric_columns)),
+            ("preprocess", prepare(numeric_columns)),
             ("regressor", RandomForestRegressor(random_state=SEED, n_jobs=1)),
         ]
     )
@@ -100,7 +56,7 @@ def evaluate(train_df, test_df, numeric_columns, label):
 
 
 def main():
-    train_df, test_df = load_fixed_split()
+    train_df, test_df = load_data()
 
     print("Вопрос: улучшает ли Vproxy = Length3 × Height × Width прогноз массы?")
     print(
