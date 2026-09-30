@@ -41,13 +41,13 @@ def train_and_predict():
         ("regressor", LinearRegression()),
     ])
     model.fit(x_train, y_train)
-    return train_df, y_test, model.predict(x_test)
+    return model, train_df, y_test, model.predict(x_test)
 
 
 def main():
     import matplotlib.pyplot as plt
 
-    train_df, y_test, predictions = train_and_predict()
+    _, train_df, y_test, predictions = train_and_predict()
     residuals = y_test - predictions
 
     print(f"MSE: {mean_squared_error(y_test, predictions):.3f}")
