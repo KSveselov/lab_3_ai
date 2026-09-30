@@ -1,5 +1,4 @@
 
-import matplotlib.pyplot as plt
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression
@@ -12,7 +11,7 @@ from config import GRAF_PATH, TARGET_COLUMN, NUMERIC_COLUMNS, CATEGORICAL_COLUMN
 
 
 
-def prepare():
+def prepare(numeric_columns=NUMERIC_COLUMNS):
     numeric_pipeline = Pipeline([
             ("imputer", SimpleImputer(strategy="median")),
             ("scaler", StandardScaler()),
@@ -24,12 +23,14 @@ def prepare():
     ])
 
     preprocess = ColumnTransformer([
-        ("numeric", numeric_pipeline, NUMERIC_COLUMNS),
+        ("numeric", numeric_pipeline, numeric_columns),
         ("categorical", categorical_pipeline, CATEGORICAL_COLUMNS),
     ])
     return preprocess
 
 def main():
+    import matplotlib.pyplot as plt
+
     train_df, test_df = load_data()
 
     feature_columns = NUMERIC_COLUMNS + CATEGORICAL_COLUMNS
