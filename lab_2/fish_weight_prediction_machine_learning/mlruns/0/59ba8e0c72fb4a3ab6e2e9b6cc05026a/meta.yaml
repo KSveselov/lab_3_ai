@@ -1,0 +1,15 @@
+artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/mlruns/0/59ba8e0c72fb4a3ab6e2e9b6cc05026a/artifacts
+end_time: 1790845287914
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 59ba8e0c72fb4a3ab6e2e9b6cc05026a
+run_name: e1-linear-1d43f77a
+run_uuid: 59ba8e0c72fb4a3ab6e2e9b6cc05026a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1790845284341
+status: 3
+tags: []
+user_id: kirill
