@@ -1,8 +1,9 @@
 artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/src/mlruns/0/f3f7805fb7d84019bd35adf7fee7be88/artifacts
+deleted_time: 1790878926020
 end_time: 1790800535854
 entry_point_name: ''
 experiment_id: '0'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: f3f7805fb7d84019bd35adf7fee7be88
 run_name: e2-ridge-884e9e16
 run_uuid: f3f7805fb7d84019bd35adf7fee7be88
