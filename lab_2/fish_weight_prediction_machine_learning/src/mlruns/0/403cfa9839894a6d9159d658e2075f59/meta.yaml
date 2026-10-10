@@ -5,7 +5,7 @@ entry_point_name: ''
 experiment_id: '0'
 lifecycle_stage: deleted
 run_id: 403cfa9839894a6d9159d658e2075f59
-run_name: e1-linear-b506c920
+run_name: Э1 - Линейная регрессия-b506c920
 run_uuid: 403cfa9839894a6d9159d658e2075f59
 source_name: ''
 source_type: 4

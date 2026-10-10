@@ -25,6 +25,7 @@ from config import (
 )
 from error_analysis import log_error_analysis
 from split_data import load_data
+from report_labels import REPORT_LABELS
 
 
 def get_git_commit():
@@ -52,11 +53,15 @@ def log_model(name, model, y_test, prediction, config, search=None, cv_scores=No
             {
                 "train_data": len(train_df) / data_len * 100,
                 "test_data": len(test_df) / data_len * 100,
-                "features": " | ".join(features),
+                "features": " | ".join(
+                    REPORT_LABELS.get(column, column) for column in features
+                ),
                 "seed": SEED,
             }
         )
-        mlflow.log_params(config)
+        mlflow.log_params(
+            {REPORT_LABELS.get(key, key): value for key, value in config.items()}
+        )
         metrics = {
             "test_mse": mean_squared_error(y_test, prediction),
             "test_mae": mean_absolute_error(y_test, prediction),
@@ -77,14 +82,16 @@ def log_model(name, model, y_test, prediction, config, search=None, cv_scores=No
                     "cv_mse_std": cv_scores.std(),
                 }
             )
-        mlflow.log_metrics(metrics)
+        mlflow.log_metrics(
+            {REPORT_LABELS.get(key, key): value for key, value in metrics.items()}
+        )
 
         mlflow.set_tags(
             {
-                "git_commit": get_git_commit(),
-                "python_version": platform.python_version(),
-                "mlflow_version": mlflow.__version__,
-                "sklearn_version": sklearn.__version__,
+                REPORT_LABELS["git_commit"]: get_git_commit(),
+                REPORT_LABELS["python_version"]: platform.python_version(),
+                REPORT_LABELS["mlflow_version"]: mlflow.__version__,
+                REPORT_LABELS["sklearn_version"]: sklearn.__version__,
             }
         )
         if "Vproxy" in features:
@@ -115,32 +122,37 @@ def log_best_model_passport(runs):
             "# Паспорт модели",
             "",
             "Модель: {}".format(best["name"]),
-            "MLflow run ID: {}".format(best["run_id"]),
-            "Задача: прогноз массы рыбы (Weight) по измерениям и виду.",
-            "Входные признаки: {}".format(", ".join(best["features"])),
+            "Идентификатор запуска MLflow: {}".format(best["run_id"]),
+            "Задача: прогноз массы рыбы по измерениям и виду.",
+            "Входные признаки: {}".format(
+                ", ".join(
+                    REPORT_LABELS.get(column, column) for column in best["features"]
+                )
+            ),
             "Предобработка и регрессор сохранены вместе в артефакте model/.",
-            "Критерий выбора: минимальное среднее CV MSE на обучающей выборке.",
-            "CV MSE: {:.3f} ± {:.3f}".format(
+            "Критерий выбора: минимальная средняя квадратичная ошибка кросс-валидации на обучающей выборке.",
+            "Средняя квадратичная ошибка кросс-валидации: {:.3f} ± {:.3f}".format(
                 metrics["cv_mse_mean"], metrics["cv_mse_std"]
             ),
-            "Test MSE: {:.3f}".format(metrics["test_mse"]),
-            "Test MAE: {:.3f}".format(metrics["test_mae"]),
-            "Test R²: {:.3f}".format(metrics["test_r2"]),
+            "Средняя квадратичная ошибка на тесте: {:.3f}".format(metrics["test_mse"]),
+            "Средняя абсолютная ошибка на тесте: {:.3f}".format(metrics["test_mae"]),
+            "Коэффициент детерминации на тесте: {:.3f}".format(metrics["test_r2"]),
             "Ограничение: качество оценено на имеющейся тестовой выборке; "
             "перенос на другие данные отдельно не проверялся.",
             "",
         ]
     )
     with TemporaryDirectory() as directory:
-        path = Path(directory) / "model_passport.md"
+        path = Path(directory) / "паспорт_модели.md"
         path.write_text(passport, encoding="utf-8")
         with mlflow.start_run(run_id=best["run_id"]):
-            mlflow.set_tag("best_model", "true")
-            mlflow.log_artifact(str(path), artifact_path="documentation")
+            mlflow.set_tag(REPORT_LABELS["best_model"], "Да")
+            mlflow.log_artifact(str(path), artifact_path="документация")
     print("Лучшая модель: {} ({})".format(best["name"], best["run_id"]))
 
 
 def main():
+    mlflow.set_experiment("Прогноз массы рыбы")
     runs = []
     model, train_df, y_test, prediction = train_linear()
     cv_scores = cross_val_score(
@@ -152,11 +164,11 @@ def main():
     )
     runs.append(
         log_model(
-            "e1-linear",
+            "Э1 - Линейная регрессия",
             model,
             y_test,
             prediction,
-            {"model": "LinearRegression"},
+            {"model": "Линейная регрессия"},
             cv_scores=cv_scores,
         )
     )
@@ -164,7 +176,7 @@ def main():
     search, y_test, prediction = train_ridge()
     runs.append(
         log_model(
-            "e2-ridge",
+            "Э2 - Регрессия с регуляризацией",
             search.best_estimator_,
             y_test,
             prediction,
@@ -176,7 +188,7 @@ def main():
     search, y_test, prediction = train_forest()
     runs.append(
         log_model(
-            "e3-forest",
+            "Э3 - Случайный лес",
             search.best_estimator_,
             y_test,
             prediction,
@@ -188,7 +200,11 @@ def main():
     for label, test_df, search, prediction in train_vproxy():
         runs.append(
             log_model(
-                "e4-{}".format("vproxy" if "Vproxy" in label else "baseline"),
+                (
+                    "Э4-Б - Случайный лес с приблизительным объёмом"
+                    if "Vproxy" in label
+                    else "Э4-А - Случайный лес с базовыми признаками"
+                ),
                 search.best_estimator_,
                 test_df[TARGET_COLUMN],
                 prediction,

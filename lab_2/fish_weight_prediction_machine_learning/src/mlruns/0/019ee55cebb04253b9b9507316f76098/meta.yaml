@@ -4,7 +4,7 @@ entry_point_name: ''
 experiment_id: '0'
 lifecycle_stage: active
 run_id: 019ee55cebb04253b9b9507316f76098
-run_name: e2-ridge-b781cb91
+run_name: Э2 - Регрессия с регуляризацией-b781cb91
 run_uuid: 019ee55cebb04253b9b9507316f76098
 source_name: ''
 source_type: 4
