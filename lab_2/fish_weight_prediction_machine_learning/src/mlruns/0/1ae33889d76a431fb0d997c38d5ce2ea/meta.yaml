@@ -1,0 +1,15 @@
+artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/src/mlruns/0/1ae33889d76a431fb0d997c38d5ce2ea/artifacts
+end_time: 1791637412859
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1ae33889d76a431fb0d997c38d5ce2ea
+run_name: Э3 - Случайный лес-e4e48e4a
+run_uuid: 1ae33889d76a431fb0d997c38d5ce2ea
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1791637410342
+status: 3
+tags: []
+user_id: kirill
