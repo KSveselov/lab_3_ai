@@ -15,18 +15,21 @@ from e1 import train_and_predict
 from split_data import load_data
 
 
+# Обучает общую модель для проверок предсказаний и сохранения пайплайна.
 @pytest.fixture(scope="module")
 def trained_model():
     model, _, _, _ = train_and_predict()
     return model
 
 
+# Проверяет, что индексы обучающей и тестовой выборок не пересекаются.
 def test_train_and_test_indices_do_not_intersect():
     train_df, test_df = load_data()
 
     assert set(train_df.index).isdisjoint(test_df.index)
 
 
+# Проверяет, что пайплайн выдаёт один конечный прогноз для неизвестного вида рыбы.
 def test_pipeline_accepts_unknown_species(trained_model):
     _, test_df = load_data()
     features = NUMERIC_COLUMNS + CATEGORICAL_COLUMNS
@@ -39,6 +42,7 @@ def test_pipeline_accepts_unknown_species(trained_model):
     assert np.isfinite(prediction).all()
 
 
+# Проверяет, что число прогнозов совпадает с числом входных строк и все прогнозы конечны.
 def test_predictions_match_input_size_and_are_finite(trained_model):
     _, test_df = load_data()
     features = NUMERIC_COLUMNS + CATEGORICAL_COLUMNS
@@ -49,6 +53,7 @@ def test_predictions_match_input_size_and_are_finite(trained_model):
     assert np.isfinite(prediction).all()
 
 
+# Проверяет, что значения MAE и MSE совпадают с результатами ручного расчёта.
 def test_metrics_match_manual_calculation():
     actual = [100.0, 200.0]
     prediction = [110.0, 180.0]
@@ -57,6 +62,7 @@ def test_metrics_match_manual_calculation():
     assert mean_squared_error(actual, prediction) == pytest.approx(250.0)
 
 
+# Проверяет, что сохранённый и загруженный пайплайн воспроизводит исходные прогнозы.
 def test_saved_pipeline_reproduces_predictions(trained_model, tmp_path):
     _, test_df = load_data()
     features = NUMERIC_COLUMNS + CATEGORICAL_COLUMNS

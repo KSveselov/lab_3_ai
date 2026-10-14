@@ -23,6 +23,7 @@ from run_mlflow import log_best_model_passport, log_model
 
 
 class RussianReportsTest(unittest.TestCase):
+    # Проверяет уникальность русских подписей, совпадение псевдонимов прогноза и допустимость подписей в MLflow.
     def test_labels_are_unique_and_accepted_by_mlflow(self):
         labels = {
             key: value for key, value in REPORT_LABELS.items() if key != "predicted"
@@ -34,6 +35,7 @@ class RussianReportsTest(unittest.TestCase):
             _validate_param_name(label)
             _validate_tag_name(label)
 
+    # Проверяет, что запуск MLflow сохраняет русские отчёты и модель, воспроизводящую прогнозы после загрузки.
     def test_new_run_exports_russian_reports_and_loadable_model(self):
         previous_uri = mlflow.get_tracking_uri()
         previous_experiment = mlflow.tracking.fluent._active_experiment_id
@@ -85,6 +87,7 @@ class RussianReportsTest(unittest.TestCase):
             mlflow.set_tracking_uri(previous_uri)
             mlflow.tracking.fluent._active_experiment_id = previous_experiment
 
+    # Проверяет, что экспорт сохраняет исходные данные и внутренние ключи метрик, используя русские подписи в MLflow.
     def test_export_does_not_change_inputs_or_internal_metric_keys(self):
         from unittest.mock import patch
         from split_data import load_data
@@ -103,6 +106,7 @@ class RussianReportsTest(unittest.TestCase):
         self.assertEqual(metrics["test_mae_species_bream"], 1.0)
 
 
+# Возвращает признаки тестовой выборки для проверки прогнозов загруженной модели.
 def model_input():
     from config import CATEGORICAL_COLUMNS, NUMERIC_COLUMNS
     from split_data import load_data
