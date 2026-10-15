@@ -1,0 +1,15 @@
+artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/src/mlruns/0/a1a4127b823247a78491ff5d2c675cde/artifacts
+end_time: 1791634070937
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a1a4127b823247a78491ff5d2c675cde
+run_name: Э4-Б - Случайный лес с приблизительным объёмом-1d7f82e7
+run_uuid: a1a4127b823247a78491ff5d2c675cde
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1791634068556
+status: 3
+tags: []
+user_id: kirill

@@ -1,0 +1,16 @@
+artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/src/mlruns/0/22f17666e5ee4553a1eec243ef18dd3d/artifacts
+deleted_time: 1790878925990
+end_time: 1790846229917
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: 22f17666e5ee4553a1eec243ef18dd3d
+run_name: Э4-А - Случайный лес с базовыми признаками-3d9668fc
+run_uuid: 22f17666e5ee4553a1eec243ef18dd3d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1790846227322
+status: 3
+tags: []
+user_id: kirill

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/src/mlruns/0/ed88cbb9fea14bf380f99aa4290fbfac/artifacts
+end_time: 1791637400197
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ed88cbb9fea14bf380f99aa4290fbfac
+run_name: Э2 - Регрессия с регуляризацией-9b837550
+run_uuid: ed88cbb9fea14bf380f99aa4290fbfac
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1791637397943
+status: 3
+tags: []
+user_id: kirill
