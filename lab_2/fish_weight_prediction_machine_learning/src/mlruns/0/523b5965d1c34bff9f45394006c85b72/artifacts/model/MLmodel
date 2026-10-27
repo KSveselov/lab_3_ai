@@ -1,0 +1,25 @@
+artifact_path: model
+flavors:
+  python_function:
+    env: conda.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.7.17
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 0.23.0
+mlflow_version: 1.30.1
+model_uuid: 53774d29b3e043a9a59f9faea95421f2
+run_id: 523b5965d1c34bff9f45394006c85b72
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  type: dataframe
+signature:
+  inputs: '[{"name": "Length3", "type": "double"}, {"name": "Height", "type": "double"},
+    {"name": "Width", "type": "double"}, {"name": "Species", "type": "string"}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1]}}]'
+utc_time_created: '2026-10-15 07:13:23.662423'

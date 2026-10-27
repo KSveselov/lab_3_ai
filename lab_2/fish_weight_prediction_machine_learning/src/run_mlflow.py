@@ -1,18 +1,18 @@
 import platform
 import subprocess
-from pathlib import Path
-from tempfile import TemporaryDirectory
 from uuid import uuid4
 
 import sklearn
+from sklearn.dummy import DummyRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import KFold, cross_val_score
+from sklearn.pipeline import Pipeline
 
 import mlflow
 import mlflow.sklearn
 from mlflow.models.signature import infer_signature
 
-from e1 import train_and_predict as train_linear
+from e1 import prepare, train_and_predict as train_linear
 from e2 import train_and_predict as train_ridge
 from e3 import train_and_predict as train_forest
 from e4 import add_vproxy, train_and_predict as train_vproxy
@@ -26,6 +26,7 @@ from config import (
 from error_analysis import log_error_analysis
 from split_data import load_data
 from report_labels import REPORT_LABELS
+from model_passport import log_run_passport
 
 
 def get_git_commit():
@@ -105,6 +106,7 @@ def log_model(name, model, y_test, prediction, config, search=None, cv_scores=No
             signature=signature,
             input_example=input_example,
         )
+        log_run_passport(run.info.run_id, model=model)
     print(name)
     return {
         "run_id": run.info.run_id,
@@ -116,66 +118,70 @@ def log_model(name, model, y_test, prediction, config, search=None, cv_scores=No
 
 def log_best_model_passport(runs):
     best = min(runs, key=lambda item: item["metrics"]["cv_mse_mean"])
-    metrics = best["metrics"]
-    passport = "\n".join(
-        [
-            "# Паспорт модели",
-            "",
-            "Модель: {}".format(best["name"]),
-            "Идентификатор запуска MLflow: {}".format(best["run_id"]),
-            "Задача: прогноз массы рыбы по измерениям и виду.",
-            "Входные признаки: {}".format(
-                ", ".join(
-                    REPORT_LABELS.get(column, column) for column in best["features"]
-                )
-            ),
-            "Предобработка и регрессор сохранены вместе в артефакте model/.",
-            "Критерий выбора: минимальная средняя квадратичная ошибка кросс-валидации (MSE) на обучающей выборке.",
-            "Средняя квадратичная ошибка кросс-валидации (MSE): {:.3f} ± {:.3f}".format(
-                metrics["cv_mse_mean"], metrics["cv_mse_std"]
-            ),
-            "Средняя квадратичная ошибка на тесте (MSE): {:.3f}".format(
-                metrics["test_mse"]
-            ),
-            "Средняя абсолютная ошибка на тесте (MAE): {:.3f}".format(
-                metrics["test_mae"]
-            ),
-            "Коэффициент детерминации на тесте (R²): {:.3f}".format(metrics["test_r2"]),
-            "Ограничение: качество оценено на имеющейся тестовой выборке; "
-            "перенос на другие данные отдельно не проверялся.",
-            "",
-        ]
-    )
-    with TemporaryDirectory() as directory:
-        path = Path(directory) / "паспорт_модели.md"
-        path.write_text(passport, encoding="utf-8")
-        with mlflow.start_run(run_id=best["run_id"]):
-            mlflow.set_tag(REPORT_LABELS["best_model"], "Да")
-            mlflow.log_artifact(str(path), artifact_path="документация")
+    log_run_passport(best["run_id"])
+    mlflow.tracking.MlflowClient().set_tag(best["run_id"], REPORT_LABELS["best_model"], "Да")
     print("Лучшая модель: {} ({})".format(best["name"], best["run_id"]))
+
+
+def log_linear_models():
+    """Сохраняет обе линейные модели с оценкой в исходной шкале массы."""
+    runs = []
+    for log_target, name in [
+        (False, "Э1 - Линейная регрессия"),
+        (True, "Э1-ln - Линейная регрессия с ln(1 + масса)"),
+    ]:
+        model, train_df, y_test, prediction = train_linear(log_target=log_target)
+        cv_scores = cross_val_score(
+            model,
+            train_df[NUMERIC_COLUMNS + CATEGORICAL_COLUMNS],
+            train_df[TARGET_COLUMN],
+            scoring="neg_mean_squared_error",
+            cv=KFold(n_splits=5, shuffle=True, random_state=SEED),
+        )
+        runs.append(
+            log_model(
+                name,
+                model,
+                y_test,
+                prediction,
+                {
+                    "model": "Линейная регрессия",
+                    "target_transform": "ln(1 + y)" if log_target else "Без преобразования",
+                    "inverse_target_transform": "exp(z) - 1" if log_target else "Без преобразования",
+                },
+                cv_scores=cv_scores,
+            )
+        )
+    return runs
+
+
+def log_baseline_models():
+    """Регистрирует обе константные модели E0 как ориентиры качества."""
+    train_df, test_df = load_data()
+    features = NUMERIC_COLUMNS + CATEGORICAL_COLUMNS
+    runs = []
+    for strategy, label in [("mean", "среднее"), ("median", "медиана")]:
+        model = Pipeline([
+            ("preprocess", prepare()),
+            ("regressor", DummyRegressor(strategy=strategy)),
+        ])
+        model.fit(train_df[features], train_df[TARGET_COLUMN])
+        cv_scores = cross_val_score(
+            model, train_df[features], train_df[TARGET_COLUMN],
+            scoring="neg_mean_squared_error",
+            cv=KFold(n_splits=5, shuffle=True, random_state=SEED),
+        )
+        runs.append(log_model(
+            "Э0 - Константный прогноз: " + label, model, test_df[TARGET_COLUMN],
+            model.predict(test_df[features]),
+            {"model": "Константный прогноз: " + label}, cv_scores=cv_scores,
+        ))
+    return runs
 
 
 def main():
     mlflow.set_experiment("Прогноз массы рыбы")
-    runs = []
-    model, train_df, y_test, prediction = train_linear()
-    cv_scores = cross_val_score(
-        model,
-        train_df[NUMERIC_COLUMNS + CATEGORICAL_COLUMNS],
-        train_df[TARGET_COLUMN],
-        scoring="neg_mean_squared_error",
-        cv=KFold(n_splits=5, shuffle=True, random_state=SEED),
-    )
-    runs.append(
-        log_model(
-            "Э1 - Линейная регрессия",
-            model,
-            y_test,
-            prediction,
-            {"model": "Линейная регрессия"},
-            cv_scores=cv_scores,
-        )
-    )
+    runs = log_baseline_models() + log_linear_models()
 
     search, y_test, prediction = train_ridge()
     runs.append(

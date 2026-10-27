@@ -20,9 +20,36 @@ from e1 import train_and_predict
 from error_analysis import log_error_analysis
 from report_labels import REPORT_LABELS
 from run_mlflow import log_best_model_passport, log_model
+from model_passport import log_run_passport
 
 
 class RussianReportsTest(unittest.TestCase):
+    def test_log_model_passport_and_backfill_preserve_run(self):
+        previous_uri = mlflow.get_tracking_uri()
+        previous_experiment = mlflow.tracking.fluent._active_experiment_id
+        try:
+            with TemporaryDirectory() as directory:
+                mlflow.set_tracking_uri(Path(directory).as_uri())
+                mlflow.set_experiment("Проверка паспорта логарифмической модели")
+                model, _, actual, prediction = train_and_predict(log_target=True)
+                result = log_model("Э1-ln", model, actual, prediction, {})
+                client = MlflowClient()
+                before = client.get_run(result["run_id"])
+                log_run_passport(result["run_id"])
+                after = client.get_run(result["run_id"])
+                self.assertEqual(before.info.status, after.info.status)
+                self.assertEqual(before.data.metrics, after.data.metrics)
+                path = client.download_artifacts(result["run_id"], "документация/паспорт_модели.md")
+                passport = Path(path).read_text(encoding="utf-8")
+                self.assertIn("exp(z)-1", passport)
+                self.assertIn("сдвиг распределения", passport)
+                self.assertIn("{:.6f}".format(result["metrics"]["test_mae"]), passport)
+                loaded = mlflow.sklearn.load_model(after.info.artifact_uri + "/model")
+                np.testing.assert_allclose(loaded.predict(model_input()), prediction)
+        finally:
+            mlflow.set_tracking_uri(previous_uri)
+            mlflow.tracking.fluent._active_experiment_id = previous_experiment
+
     # Проверяет уникальность русских подписей, совпадение псевдонимов прогноза и допустимость подписей в MLflow.
     def test_labels_are_unique_and_accepted_by_mlflow(self):
         labels = {
@@ -52,6 +79,11 @@ class RussianReportsTest(unittest.TestCase):
                     {"model": "Линейная регрессия"},
                     cv_scores=np.array([-100.0, -200.0]),
                 )
+                # Паспорт нужен каждому запуску ещё до выбора лучшей модели.
+                client = MlflowClient()
+                documents = {item.path for item in client.list_artifacts(result["run_id"], "документация")}
+                self.assertIn("документация/паспорт_модели.md", documents)
+                self.assertIn("документация/вопросы_и_ответы.md", documents)
                 log_best_model_passport([result])
                 run = MlflowClient().get_run(result["run_id"])
                 self.assertTrue(run.info.run_name.startswith("Э1 - Линейная регрессия"))

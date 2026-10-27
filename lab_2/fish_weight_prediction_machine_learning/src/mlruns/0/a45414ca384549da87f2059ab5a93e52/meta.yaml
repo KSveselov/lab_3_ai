@@ -1,0 +1,15 @@
+artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/src/mlruns/0/a45414ca384549da87f2059ab5a93e52/artifacts
+end_time: 1792604325588
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a45414ca384549da87f2059ab5a93e52
+run_name: 'Э0 - Константный прогноз: среднее-316ded9e'
+run_uuid: a45414ca384549da87f2059ab5a93e52
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1792604321364
+status: 3
+tags: []
+user_id: kirill
