@@ -18,12 +18,12 @@ def main() -> None:
     model = YOLO(str(model_path))
     model.train(
         data=str(data_path),
-        epochs=50,
+        epochs=25,
         imgsz=640,
         batch=16,
         seed=42,
         deterministic=True,
-        device="cpu",
+        device=0,
         project=str(ROOT / "runs/ppe"),
         name="e1-opora",
     )
@@ -33,7 +33,7 @@ def main() -> None:
         split="test",
         imgsz=640,
         batch=16,
-        device="cpu",
+        device=0,
         plots=True,
         project=str(model.trainer.save_dir),
         name="test",
