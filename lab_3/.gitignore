@@ -4,3 +4,4 @@ Construction-Site-Safety-PPE-Detection-main/data/raw/
 Construction-Site-Safety-PPE-Detection-main/data/processed/
 venv/
 .venv-rocm/
+data.zip
