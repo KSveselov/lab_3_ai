@@ -20,7 +20,7 @@ def main() -> None:
         data=str(data_path),
         epochs=25,
         imgsz=960,
-        batch=4,
+        batch=16,
         seed=42,
         deterministic=True,
         device=0,
