@@ -1,7 +1,4 @@
-"""Сохранить эталоны и предсказания E2 для галерей ошибок.
-
-CPU: python scripts/predict_ppe.py
-GPU: env -u PYTHONPATH .venv-rocm/bin/python scripts/predict_ppe.py --device 0
+"""Сохранить эталоны и предсказания E2 для галерей и системной оценки.
 Выход: reports/error-analysis/predictions.json.
 """
 
