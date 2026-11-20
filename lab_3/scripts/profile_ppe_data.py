@@ -1,4 +1,4 @@
-"""Create a reproducible inventory of the downloaded PPE dataset."""
+"""Проверка формата изобажения и их группировка"""
 
 from __future__ import annotations
 

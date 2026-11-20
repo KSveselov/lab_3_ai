@@ -1,4 +1,4 @@
-"""Create a frozen, group-disjoint PPE split and materialize YOLO paths."""
+"""Разбиение датасета на train, valid, test (70, 15, 15)"""
 
 from __future__ import annotations
 

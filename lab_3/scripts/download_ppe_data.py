@@ -1,5 +1,4 @@
-"""Download the public Kaggle mirror of Roboflow Construction Site Safety v28."""
-
+"""Загрузка датасета."""
 from __future__ import annotations
 
 import argparse

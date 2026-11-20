@@ -1,5 +1,4 @@
-"""Select reproducible PPE annotation audit samples and render labeled contact sheets."""
-
+"""Стоим audit.csv с проверкой 40 изобажений (до обучения)"""
 from __future__ import annotations
 
 import argparse

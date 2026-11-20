@@ -1,4 +1,4 @@
-"""Validate paths, annotation schema, hashes, and group isolation of the PPE split."""
+"""Проверка полученного разбиения с помощью split_ppe"""
 
 from __future__ import annotations
 
