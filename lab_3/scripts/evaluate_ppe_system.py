@@ -19,7 +19,8 @@ import numpy as np
 import psutil
 from PIL import Image, ImageDraw, ImageFont
 
-from visualize_ppe_errors import ROOT, match_boxes, validate_record
+from predict_ppe import load_test_records
+from visualize_ppe_errors import ROOT, match_boxes
 
 MODELS = (("E1", "e1-opora-colab-2", 640), ("E2", "e2-img960-colab-2", 960))
 VARIANTS = {
@@ -193,16 +194,8 @@ def main():
         raise RuntimeError("Для этого протокола требуется GPU; используйте .venv-rocm вне песочницы")
     torch.set_num_threads(4)
     cv2.setNumThreads(1)
-    cache = json.loads((ROOT / "reports/error-analysis/predictions.json").read_text())
-    records = cache["images"]
-    split = ROOT / "Construction-Site-Safety-PPE-Detection-main/data/splits/test.txt"
-    if hashlib.sha256(split.read_bytes()).hexdigest() != cache["settings"]["test_sha256"]:
-        raise ValueError("Изменён замороженный тестовый список")
-    expected = {str(Path("Construction-Site-Safety-PPE-Detection-main") / line) for line in split.read_text().splitlines()}
-    if len(records) != len(expected) or {r["image"] for r in records} != expected:
-        raise ValueError("Состав сохранённых эталонов не совпадает с тестовым списком")
+    records, test_digest = load_test_records()
     for record in records:
-        validate_record(record)
         if read_image(ROOT / record["image"]).shape[:2] != (640, 640):
             raise ValueError("Протокол масштабирования рассчитан на квадратные кадры 640×640")
     sample = sorted(random.Random(42).sample(records, 60), key=lambda record: record["image"])
@@ -213,7 +206,7 @@ def main():
               "cpu_threads": torch.get_num_threads(), "opencv_threads": cv2.getNumThreads()},
               "protocol": {"frames": len(records), "warmup_calls": 10, "batch": 1, "precision": "FP32",
               "confidence": 0.25, "nms_iou": 0.7, "match_iou": 0.5, "robustness_frames": 60, "seed": 42,
-              "test_sha256": cache["settings"]["test_sha256"]}, "models": {}}
+              "test_sha256": test_digest}, "models": {}}
     all_timings, all_robustness = [], []
     for name, folder, size in MODELS:
         weights = ROOT / "runs/ppe" / folder / "weights/best.pt"

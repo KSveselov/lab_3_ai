@@ -1,17 +1,48 @@
 """Проверки подсчёта тревог, статистик задержки и стресс-преобразований без GPU."""
 
 import copy
+import hashlib
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from evaluate_ppe_system import aggregate, perturb, score, timing_summary
+from evaluate_ppe_system import aggregate, load_test_records, perturb, score, timing_summary
+import predict_ppe
 
 
 class SystemEvaluationTest(unittest.TestCase):
+    def test_loads_test_data_without_predictions_json(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = root / "Construction-Site-Safety-PPE-Detection-main"
+            image = project / "data/raw/test/images/sample.jpg"
+            image.parent.mkdir(parents=True)
+            image.touch()
+            label = image.parent.parent / "labels/sample.txt"
+            label.parent.mkdir()
+            label.write_text("2 0.5 0.5 0.2 0.4\n")
+            split = project / "data/splits/test.txt"
+            split.parent.mkdir()
+            split.write_text("data/raw/test/images/sample.jpg\n")
+            digest = hashlib.sha256(split.read_bytes()).hexdigest()
+            split.with_suffix(".sha256").write_text(digest)
+            with patch.object(predict_ppe, "ROOT", root), patch("visualize_ppe_errors.ROOT", root):
+                records, actual_digest = load_test_records()
+                self.assertEqual(actual_digest, digest)
+                self.assertEqual(records, [{
+                    "image": str(image.relative_to(root)),
+                    "truth": [{"class_id": 2, "box": [0.4, 0.3, 0.6, 0.7]}],
+                    "predictions": [],
+                }])
+                split.write_text("../outside.jpg\n")
+                with self.assertRaisesRegex(ValueError, "замороженный список"):
+                    load_test_records()
+
     def test_false_alarms_and_critical_recall(self):
         truth = [{"class_id": 2, "box": [0, 0, 0.5, 0.5]}]
         predictions = [truth[0], {"class_id": 3, "box": [0.6, 0.6, 1, 1]},
