@@ -1,0 +1,15 @@
+artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/src/mlruns/0/523b5965d1c34bff9f45394006c85b72/artifacts
+end_time: 1792048405829
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 523b5965d1c34bff9f45394006c85b72
+run_name: Э1 - Линейная регрессия-20fe93fa
+run_uuid: 523b5965d1c34bff9f45394006c85b72
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1792048403091
+status: 3
+tags: []
+user_id: kirill

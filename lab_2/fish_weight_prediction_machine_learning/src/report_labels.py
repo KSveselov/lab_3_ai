@@ -13,6 +13,8 @@ REPORT_LABELS = {
     "features": "Признаки",
     "seed": "Начальное состояние генератора",
     "model": "Модель",
+    "target_transform": "Преобразование целевой переменной",
+    "inverse_target_transform": "Обратное преобразование целевой переменной",
     "model_class": "Класс модели",
     "regressor__alpha": "Коэффициент регуляризации",
     "regressor__n_estimators": "Число деревьев",

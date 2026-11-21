@@ -1,0 +1,217 @@
+{
+  "settings": {
+    "weights": "/home/kirill/lab_3_ai/lab_3/runs/ppe/e2-img960-colab-2/weights/best.pt",
+    "weights_sha256": "e798a16cbce90f1c005073a3749a37c3b0003ee9b0d67d35706d9fff9156dcc1",
+    "test_sha256": "5cabc10fa036fbda26aebce5a7b382479c30b925df6493c64b239ffb3329befe",
+    "imgsz": 960,
+    "conf": 0.25,
+    "nms_iou": 0.7,
+    "match_iou": 0.5,
+    "device": "0",
+    "torch": "2.14.0+rocm10.0.0"
+  },
+  "candidate_counts": {
+    "high_confidence_fp": 53,
+    "critical_misses": 132,
+    "low_iou": 933,
+    "class_confusion": 56,
+    "small_occluded": 1561,
+    "annotation_suspects": 2
+  },
+  "examples": [
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/image_294_jpg.rf.3fb7868468c81bc16637ea012898a6a3.jpg",
+      "category": "high_confidence_fp",
+      "score": 0.9687818884849548,
+      "gt": null,
+      "pred": 0,
+      "gallery": "high_confidence_fp/01.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/construction-1-_mp4-115_jpg.rf.2aa43302e55d176724bc0d99dcea9663.jpg",
+      "category": "high_confidence_fp",
+      "score": 0.9242775440216064,
+      "gt": null,
+      "pred": 0,
+      "gallery": "high_confidence_fp/02.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/mms_00691_jpg.rf.4a761e77f8d5c433d7a2844e18433b7f.jpg",
+      "category": "high_confidence_fp",
+      "score": 0.9188885688781738,
+      "gt": null,
+      "pred": 1,
+      "gallery": "high_confidence_fp/03.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/amz_01638_png_jpg.rf.f7e798738c704d161996d8dbfba2a994.jpg",
+      "category": "high_confidence_fp",
+      "score": 0.9010395407676697,
+      "gt": null,
+      "pred": 0,
+      "gallery": "high_confidence_fp/04.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/IMG_3103_mp4-3_jpg.rf.b57a67cc9edcb3ac7ee87b2e14e56605.jpg",
+      "category": "critical_misses",
+      "score": 0.1515625,
+      "gt": 0,
+      "pred": null,
+      "gallery": "critical_misses/01.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/image_721_jpg.rf.24fc8a861c4a80e9312d55453bcfd926.jpg",
+      "category": "critical_misses",
+      "score": 0.11735839843750004,
+      "gt": 12,
+      "pred": null,
+      "gallery": "critical_misses/02.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/valid/images/IMG_3100_mp4-1_jpg.rf.7b4a6df995ec2702dee6e7f8c5b47e14.jpg",
+      "category": "critical_misses",
+      "score": 0.10184936523437499,
+      "gt": 1,
+      "pred": null,
+      "gallery": "critical_misses/03.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/p65621379_jpg.rf.5735572551e7f087e9ba38b09f0b3646.jpg",
+      "category": "critical_misses",
+      "score": 0.06739257812500005,
+      "gt": 3,
+      "pred": null,
+      "gallery": "critical_misses/04.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/IMG_3100_mp4-15_jpg.rf.c31067570072a0839fd1ab6cd0b7a5a7.jpg",
+      "category": "low_iou",
+      "score": 0.4992092726620522,
+      "gt": 27,
+      "pred": 36,
+      "iou": 0.5007907273379478,
+      "gallery": "low_iou/01.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/005310_jpg.rf.462b38e32ee1aed612c4ed119dc9a06e.jpg",
+      "category": "low_iou",
+      "score": 0.4977223800339886,
+      "gt": 10,
+      "pred": 18,
+      "iou": 0.5022776199660114,
+      "gallery": "low_iou/02.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/IMG_5850_jpg.rf.03ab0fe3cfb17b8bab4c149542d6b970.jpg",
+      "category": "low_iou",
+      "score": 0.49735135588311885,
+      "gt": 33,
+      "pred": 38,
+      "iou": 0.5026486441168811,
+      "gallery": "low_iou/03.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/class1_075_jpg.rf.f7bb65e5958e262cf9b3ab5ea58eb1c3.jpg",
+      "category": "low_iou",
+      "score": 0.49695549580412635,
+      "gt": 4,
+      "pred": 11,
+      "iou": 0.5030445041958737,
+      "gallery": "low_iou/04.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/329_jpg.rf.4a5e5473d213e592580c29c03b2db094.jpg",
+      "category": "class_confusion",
+      "score": 0.9933965802337531,
+      "gt": 7,
+      "pred": 10,
+      "iou": 0.9933965802337531,
+      "gallery": "class_confusion/01.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/bookstore_38_02_altavista_jpg.rf.79035ad5581fdab7e754f904debfb905.jpg",
+      "category": "class_confusion",
+      "score": 0.9848179007899673,
+      "gt": 0,
+      "pred": 7,
+      "iou": 0.9848179007899673,
+      "gallery": "class_confusion/02.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/Image_1009_jpg.rf.70bc8d863b6a6ee361a435519a7fe2de.jpg",
+      "category": "class_confusion",
+      "score": 0.9585580623233663,
+      "gt": 16,
+      "pred": 10,
+      "iou": 0.9585580623233663,
+      "gallery": "class_confusion/03.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/construction-135-_jpg.rf.de989df51bba3fbfd485a65b285614a9.jpg",
+      "category": "class_confusion",
+      "score": 0.9390246426470523,
+      "gt": 1,
+      "pred": 4,
+      "iou": 0.9390246426470523,
+      "gallery": "class_confusion/04.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/01437_jpg.rf.7839171efbe212f40b2c6ce1f3c8819b.jpg",
+      "category": "small_occluded",
+      "score": 0.7247314453125,
+      "gt": 7,
+      "pred": 4,
+      "area": 0.2752685546875,
+      "same_class_overlap": 0.5980576496674057,
+      "gallery": "small_occluded/01.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/ka_00884_png_jpg.rf.cfbcd01afdb3e6274dc39708b04b125d.jpg",
+      "category": "small_occluded",
+      "score": 0.9999874232597392,
+      "gt": 32,
+      "pred": null,
+      "area": 1.2576740260751218e-05,
+      "same_class_overlap": 0.0,
+      "gallery": "small_occluded/02.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/image_781_jpg.rf.30fe7f898afdb328ed872a9add06817a.jpg",
+      "category": "small_occluded",
+      "score": 0.9999852947477558,
+      "gt": 6,
+      "pred": null,
+      "area": 1.4705252244247847e-05,
+      "same_class_overlap": 0.0,
+      "gallery": "small_occluded/03.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/IMG_3103_mp4-15_jpg.rf.50d17fb072207d6adc1aa10293ea50bd.jpg",
+      "category": "small_occluded",
+      "score": 0.9999804119352558,
+      "gt": 4,
+      "pred": null,
+      "area": 1.9588064744247987e-05,
+      "same_class_overlap": 0.0,
+      "gallery": "small_occluded/04.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/mms_00691_jpg.rf.4a761e77f8d5c433d7a2844e18433b7f.jpg",
+      "category": "annotation_suspects",
+      "score": 0.9188885688781738,
+      "gt": null,
+      "pred": 1,
+      "max_iou": 0.00558010551445023,
+      "gallery": "annotation_suspects/01.jpg"
+    },
+    {
+      "image": "Construction-Site-Safety-PPE-Detection-main/data/raw/train/images/amz_01638_png_jpg.rf.f7e798738c704d161996d8dbfba2a994.jpg",
+      "category": "annotation_suspects",
+      "score": 0.9010395407676697,
+      "gt": null,
+      "pred": 0,
+      "max_iou": 0.0011265816034264028,
+      "gallery": "annotation_suspects/02.jpg"
+    }
+  ]
+}

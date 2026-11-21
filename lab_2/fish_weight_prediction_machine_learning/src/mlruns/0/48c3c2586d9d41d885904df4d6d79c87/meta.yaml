@@ -1,0 +1,15 @@
+artifact_uri: file:///home/kirill/lab_3_ai/lab_2/fish_weight_prediction_machine_learning/src/mlruns/0/48c3c2586d9d41d885904df4d6d79c87/artifacts
+end_time: 1792053270095
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 48c3c2586d9d41d885904df4d6d79c87
+run_name: 'Э0 - Константный прогноз: медиана-ba3dd260'
+run_uuid: 48c3c2586d9d41d885904df4d6d79c87
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1792053268076
+status: 3
+tags: []
+user_id: kirill

@@ -1,0 +1,316 @@
+{
+  "environment": {
+    "python": "3.14.4",
+    "torch": "2.14.0+rocm10.0.0",
+    "ultralytics": "8.4.191",
+    "opencv": "5.0.0",
+    "gpu": "AMD Radeon RX 6600",
+    "gpu_total_mib": 8176.0,
+    "cpu_threads": 4,
+    "opencv_threads": 1
+  },
+  "protocol": {
+    "frames": 420,
+    "warmup_calls": 10,
+    "batch": 1,
+    "precision": "FP32",
+    "confidence": 0.25,
+    "nms_iou": 0.7,
+    "match_iou": 0.5,
+    "robustness_frames": 60,
+    "seed": 42,
+    "test_sha256": "5cabc10fa036fbda26aebce5a7b382479c30b925df6493c64b239ffb3329befe"
+  },
+  "models": {
+    "E1": {
+      "weights": "runs/ppe/e1-opora-colab-2/weights/best.pt",
+      "weights_sha256": "d0827f0c844c4cef43c1912fd302c8bbaa36d746252b72a11459b3043bcdc86a",
+      "imgsz": 640,
+      "timings_ms": {
+        "decode_ms": {
+          "median": 1.7708059999677062,
+          "p95": 2.112872800216792
+        },
+        "resize_ms": {
+          "median": 0.002478999704180751,
+          "p95": 0.004544699368125286
+        },
+        "preprocess_ms": {
+          "median": 0.6951925001885684,
+          "p95": 0.8191308002551521
+        },
+        "inference_ms": {
+          "median": 8.764721000261488,
+          "p95": 10.000380999235855
+        },
+        "postprocess_ms": {
+          "median": 1.2952609999956621,
+          "p95": 1.5686140504840296
+        },
+        "overhead_ms": {
+          "median": 0.6061475005481043,
+          "p95": 0.8655270004055636
+        },
+        "total_ms": {
+          "median": 13.20424000005005,
+          "p95": 15.115256750141269
+        }
+      },
+      "serial_fps": 74.9924700997968,
+      "memory_mib": {
+        "gpu_allocated_peak": 42.92529296875,
+        "gpu_reserved_peak": 60.0,
+        "rss_sampled_peak": 1305.51171875
+      },
+      "detections": {
+        "frames": 420,
+        "tp": 4040,
+        "fn": 1718,
+        "fp": 1153,
+        "frames_with_fp": 348,
+        "alarm_fp": 332,
+        "frames_with_alarm_fp": 194,
+        "critical_gt": 364,
+        "critical_tp": 230,
+        "precision": 0.7779703446947814,
+        "recall": 0.7016325112886419,
+        "critical_recall": 0.6318681318681318,
+        "fp_per_100_frames": 274.5238095238095,
+        "alarm_fp_per_100_frames": 79.04761904761905,
+        "alarm_frames_per_100": 46.19047619047619
+      },
+      "robustness": {
+        "original": {
+          "frames": 60,
+          "tp": 586,
+          "fn": 284,
+          "fp": 173,
+          "frames_with_fp": 55,
+          "alarm_fp": 44,
+          "frames_with_alarm_fp": 28,
+          "critical_gt": 65,
+          "critical_tp": 38,
+          "precision": 0.7720685111989459,
+          "recall": 0.6735632183908046,
+          "critical_recall": 0.5846153846153846,
+          "fp_per_100_frames": 288.3333333333333,
+          "alarm_fp_per_100_frames": 73.33333333333333,
+          "alarm_frames_per_100": 46.666666666666664
+        },
+        "dark": {
+          "frames": 60,
+          "tp": 585,
+          "fn": 285,
+          "fp": 160,
+          "frames_with_fp": 56,
+          "alarm_fp": 46,
+          "frames_with_alarm_fp": 32,
+          "critical_gt": 65,
+          "critical_tp": 40,
+          "precision": 0.785234899328859,
+          "recall": 0.6724137931034483,
+          "critical_recall": 0.6153846153846154,
+          "fp_per_100_frames": 266.6666666666667,
+          "alarm_fp_per_100_frames": 76.66666666666667,
+          "alarm_frames_per_100": 53.333333333333336
+        },
+        "bright": {
+          "frames": 60,
+          "tp": 537,
+          "fn": 333,
+          "fp": 174,
+          "frames_with_fp": 55,
+          "alarm_fp": 44,
+          "frames_with_alarm_fp": 26,
+          "critical_gt": 65,
+          "critical_tp": 36,
+          "precision": 0.7552742616033755,
+          "recall": 0.6172413793103448,
+          "critical_recall": 0.5538461538461539,
+          "fp_per_100_frames": 290.0,
+          "alarm_fp_per_100_frames": 73.33333333333333,
+          "alarm_frames_per_100": 43.333333333333336
+        },
+        "occluded": {
+          "frames": 60,
+          "tp": 511,
+          "fn": 359,
+          "fp": 242,
+          "frames_with_fp": 56,
+          "alarm_fp": 68,
+          "frames_with_alarm_fp": 37,
+          "critical_gt": 65,
+          "critical_tp": 10,
+          "precision": 0.6786188579017264,
+          "recall": 0.5873563218390805,
+          "critical_recall": 0.15384615384615385,
+          "fp_per_100_frames": 403.3333333333333,
+          "alarm_fp_per_100_frames": 113.33333333333333,
+          "alarm_frames_per_100": 61.666666666666664
+        },
+        "rotated": {
+          "frames": 60,
+          "tp": 386,
+          "fn": 464,
+          "fp": 174,
+          "frames_with_fp": 52,
+          "alarm_fp": 37,
+          "frames_with_alarm_fp": 25,
+          "critical_gt": 62,
+          "critical_tp": 25,
+          "precision": 0.6892857142857143,
+          "recall": 0.4541176470588235,
+          "critical_recall": 0.4032258064516129,
+          "fp_per_100_frames": 290.0,
+          "alarm_fp_per_100_frames": 61.666666666666664,
+          "alarm_frames_per_100": 41.666666666666664
+        }
+      }
+    },
+    "E2": {
+      "weights": "runs/ppe/e2-img960-colab-2/weights/best.pt",
+      "weights_sha256": "e798a16cbce90f1c005073a3749a37c3b0003ee9b0d67d35706d9fff9156dcc1",
+      "imgsz": 960,
+      "timings_ms": {
+        "decode_ms": {
+          "median": 1.8064070000036736,
+          "p95": 2.1999362002134144
+        },
+        "resize_ms": {
+          "median": 1.8420055002934532,
+          "p95": 2.1794585002680833
+        },
+        "preprocess_ms": {
+          "median": 1.328614000158268,
+          "p95": 1.664264850342078
+        },
+        "inference_ms": {
+          "median": 12.759170500430628,
+          "p95": 14.599557600422484
+        },
+        "postprocess_ms": {
+          "median": 1.3809720003337134,
+          "p95": 1.8377450996013067
+        },
+        "overhead_ms": {
+          "median": 0.7023730004220852,
+          "p95": 1.0092047491070844
+        },
+        "total_ms": {
+          "median": 19.83835100008946,
+          "p95": 22.505079000075053
+        }
+      },
+      "serial_fps": 51.68587683045985,
+      "memory_mib": {
+        "gpu_allocated_peak": 57.8955078125,
+        "gpu_reserved_peak": 78.0,
+        "rss_sampled_peak": 1308.43359375
+      },
+      "detections": {
+        "frames": 420,
+        "tp": 4224,
+        "fn": 1534,
+        "fp": 1228,
+        "frames_with_fp": 354,
+        "alarm_fp": 371,
+        "frames_with_alarm_fp": 214,
+        "critical_gt": 364,
+        "critical_tp": 232,
+        "precision": 0.7747615553925165,
+        "recall": 0.7335880514067384,
+        "critical_recall": 0.6373626373626373,
+        "fp_per_100_frames": 292.3809523809524,
+        "alarm_fp_per_100_frames": 88.33333333333333,
+        "alarm_frames_per_100": 50.95238095238095
+      },
+      "robustness": {
+        "original": {
+          "frames": 60,
+          "tp": 619,
+          "fn": 251,
+          "fp": 180,
+          "frames_with_fp": 49,
+          "alarm_fp": 49,
+          "frames_with_alarm_fp": 31,
+          "critical_gt": 65,
+          "critical_tp": 42,
+          "precision": 0.7747183979974969,
+          "recall": 0.7114942528735633,
+          "critical_recall": 0.6461538461538462,
+          "fp_per_100_frames": 300.0,
+          "alarm_fp_per_100_frames": 81.66666666666667,
+          "alarm_frames_per_100": 51.666666666666664
+        },
+        "dark": {
+          "frames": 60,
+          "tp": 617,
+          "fn": 253,
+          "fp": 151,
+          "frames_with_fp": 47,
+          "alarm_fp": 40,
+          "frames_with_alarm_fp": 26,
+          "critical_gt": 65,
+          "critical_tp": 40,
+          "precision": 0.8033854166666666,
+          "recall": 0.7091954022988506,
+          "critical_recall": 0.6153846153846154,
+          "fp_per_100_frames": 251.66666666666666,
+          "alarm_fp_per_100_frames": 66.66666666666667,
+          "alarm_frames_per_100": 43.333333333333336
+        },
+        "bright": {
+          "frames": 60,
+          "tp": 564,
+          "fn": 306,
+          "fp": 176,
+          "frames_with_fp": 51,
+          "alarm_fp": 44,
+          "frames_with_alarm_fp": 30,
+          "critical_gt": 65,
+          "critical_tp": 38,
+          "precision": 0.7621621621621621,
+          "recall": 0.6482758620689655,
+          "critical_recall": 0.5846153846153846,
+          "fp_per_100_frames": 293.3333333333333,
+          "alarm_fp_per_100_frames": 73.33333333333333,
+          "alarm_frames_per_100": 50.0
+        },
+        "occluded": {
+          "frames": 60,
+          "tp": 543,
+          "fn": 327,
+          "fp": 248,
+          "frames_with_fp": 57,
+          "alarm_fp": 63,
+          "frames_with_alarm_fp": 36,
+          "critical_gt": 65,
+          "critical_tp": 13,
+          "precision": 0.6864728192161821,
+          "recall": 0.6241379310344828,
+          "critical_recall": 0.2,
+          "fp_per_100_frames": 413.3333333333333,
+          "alarm_fp_per_100_frames": 105.0,
+          "alarm_frames_per_100": 60.0
+        },
+        "rotated": {
+          "frames": 60,
+          "tp": 416,
+          "fn": 434,
+          "fp": 144,
+          "frames_with_fp": 51,
+          "alarm_fp": 36,
+          "frames_with_alarm_fp": 22,
+          "critical_gt": 62,
+          "critical_tp": 26,
+          "precision": 0.7428571428571429,
+          "recall": 0.4894117647058824,
+          "critical_recall": 0.41935483870967744,
+          "fp_per_100_frames": 240.0,
+          "alarm_fp_per_100_frames": 60.0,
+          "alarm_frames_per_100": 36.666666666666664
+        }
+      }
+    }
+  }
+}
