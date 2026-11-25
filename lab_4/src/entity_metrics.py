@@ -3,7 +3,7 @@
 from .generate_data import LABELS
 
 
-def entity_keys(entities, text):
+def entity_keys(entities, text, *, allow_duplicates=False):
     """Проверка диапазонов и преобразование сущностей для строгого сравнения."""
     if not isinstance(entities, list):
         raise ValueError("Сущности должны быть списком")
@@ -17,7 +17,7 @@ def entity_keys(entities, text):
         if not 0 <= start < end <= len(text) or label not in LABELS:
             raise ValueError("Недопустимый диапазон или класс сущности")
         key = (start, end, label)
-        if key in keys:
+        if not allow_duplicates and key in keys:
             raise ValueError("Повтор сущности с теми же границами и типом")
         keys.add(key)
     return keys

@@ -1,0 +1,18 @@
+{"id": "diagnostic_01", "entities": [{"start": 32, "end": 36, "label": "LOCATION"}]}
+{"id": "diagnostic_02", "entities": []}
+{"id": "diagnostic_03", "entities": []}
+{"id": "diagnostic_04", "entities": [{"start": 13, "end": 23, "label": "DATE"}]}
+{"id": "diagnostic_05", "entities": [{"start": 19, "end": 34, "label": "PHONE"}]}
+{"id": "diagnostic_06", "entities": [{"start": 21, "end": 33, "label": "PHONE"}, {"start": 34, "end": 39, "label": "ID"}]}
+{"id": "diagnostic_07", "entities": [{"start": 15, "end": 39, "label": "EMAIL"}]}
+{"id": "diagnostic_08", "entities": [{"start": 13, "end": 24, "label": "ID"}]}
+{"id": "diagnostic_09", "entities": [{"start": 31, "end": 42, "label": "ID"}]}
+{"id": "diagnostic_10", "entities": [{"start": 31, "end": 37, "label": "ID"}]}
+{"id": "diagnostic_11", "entities": [{"start": 20, "end": 44, "label": "ORGANIZATION"}]}
+{"id": "diagnostic_12", "entities": [{"start": 18, "end": 19, "label": "NAME"}, {"start": 19, "end": 53, "label": "LOCATION"}, {"start": 55, "end": 56, "label": "LOCATION"}]}
+{"id": "diagnostic_13", "entities": []}
+{"id": "diagnostic_14", "entities": [{"start": 45, "end": 46, "label": "AGE"}]}
+{"id": "diagnostic_15", "entities": []}
+{"id": "diagnostic_16", "entities": []}
+{"id": "diagnostic_17", "entities": []}
+{"id": "diagnostic_18", "entities": []}

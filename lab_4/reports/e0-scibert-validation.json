@@ -1,0 +1,168 @@
+{
+  "experiment": "E0-SciBERT",
+  "split": "validation",
+  "training_mode": "full_fine_tuning",
+  "selection_metric": "validation.micro.f1",
+  "config": {
+    "model_id": "allenai/scibert_scivocab_uncased",
+    "revision": "24f92d32b1bfb0bcaf9ab193ff3ad01e87732fc1",
+    "seed": 42,
+    "epochs": 6,
+    "batch_size": 4,
+    "learning_rate": 2e-05,
+    "weight_decay": 0.01,
+    "max_length": 256,
+    "max_grad_norm": 1.0,
+    "num_threads": 4
+  },
+  "label2id": {
+    "O": 0,
+    "B-NAME": 1,
+    "I-NAME": 2,
+    "B-DATE": 3,
+    "I-DATE": 4,
+    "B-PHONE": 5,
+    "I-PHONE": 6,
+    "B-EMAIL": 7,
+    "I-EMAIL": 8,
+    "B-ID": 9,
+    "I-ID": 10,
+    "B-LOCATION": 11,
+    "I-LOCATION": 12,
+    "B-ORGANIZATION": 13,
+    "I-ORGANIZATION": 14,
+    "B-AGE": 15,
+    "I-AGE": 16
+  },
+  "environment": {
+    "python": "3.13.16",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "torch": "2.14.1+cu130",
+    "transformers": "5.0.0",
+    "tokenizers": "0.22.2",
+    "device": "cuda",
+    "device_name": "Tesla T4",
+    "cpu_threads": 4,
+    "cuda": "13.0"
+  },
+  "input_sha256": {
+    "train.jsonl": "eca9366d6019852d05c7dde43d9e79943742c549f31c8d1c9b14e902f9ee8f34",
+    "validation.jsonl": "bda440c1d7d1abce73965679b8e4b1cf61979b6586026b8154297881f856a93a"
+  },
+  "best_epoch": 3,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.189756268215807,
+      "validation_micro_f1": 0.2888086642599278
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.21641574080249196,
+      "validation_micro_f1": 0.8356807511737089
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.035253740838777865,
+      "validation_micro_f1": 0.96
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.007732595767501104,
+      "validation_micro_f1": 0.9056603773584906
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.004236959944675235,
+      "validation_micro_f1": 0.9230769230769231
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.0027115770057150115,
+      "validation_micro_f1": 0.8930232558139535
+    }
+  ],
+  "metrics": {
+    "records": 36,
+    "per_class": {
+      "NAME": {
+        "tp": 12,
+        "fp": 2,
+        "fn": 0,
+        "precision": 0.8571428571428571,
+        "recall": 1.0,
+        "f1": 0.9230769230769231
+      },
+      "DATE": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "PHONE": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "EMAIL": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "ID": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "LOCATION": {
+        "tp": 12,
+        "fp": 6,
+        "fn": 0,
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8
+      },
+      "ORGANIZATION": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "AGE": {
+        "tp": 12,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "micro": {
+      "tp": 96,
+      "fp": 8,
+      "fn": 0,
+      "precision": 0.9230769230769231,
+      "recall": 1.0,
+      "f1": 0.96
+    },
+    "macro": {
+      "precision": 0.9404761904761905,
+      "recall": 1.0,
+      "f1": 0.9653846153846154
+    },
+    "token_accuracy": 0.9961183891314895
+  }
+}

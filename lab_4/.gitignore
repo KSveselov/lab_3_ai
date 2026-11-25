@@ -3,3 +3,4 @@ __pycache__/
 .pytest_cache/
 artifacts/
 /experiments/e0_scibert_results.zip
+/experiments/e0_scibert_results_полное.zip

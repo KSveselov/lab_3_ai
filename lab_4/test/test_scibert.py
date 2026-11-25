@@ -40,37 +40,39 @@ def test_decode_repairs_orphan_inside_tag():
 
 
 @pytest.fixture
-def notebook_scope():
+def notebook_scope(monkeypatch):
     pytest.importorskip("torch")
     pytest.importorskip("transformers")
     notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
     scope = {"__name__": "notebook_test"}
     import sys
     from types import ModuleType
-    from unittest.mock import patch
     google = ModuleType("google")
     colab = ModuleType("google.colab")
     colab.files = ModuleType("google.colab.files")
     google.colab = colab
-    for cell in notebook["cells"]:
-        tags = cell.get("metadata", {}).get("tags", [])
-        if "imports" in tags or "functions" in tags:
-            with patch.dict(sys.modules, {"google": google, "google.colab": colab}):
+    with monkeypatch.context() as imports:
+        imports.setitem(sys.modules, "google", google)
+        imports.setitem(sys.modules, "google.colab", colab)
+        for cell in notebook["cells"]:
+            tags = cell.get("metadata", {}).get("tags", [])
+            if "imports" in tags or "functions" in tags:
                 exec(compile("".join(cell["source"]), str(NOTEBOOK), "exec"), scope)
     return scope
 
 
 @pytest.fixture
-def tokenizer(tmp_path, notebook_scope):
+def tokenizer(notebook_scope):
     from transformers import BertTokenizerFast
 
     vocabulary = [
         "[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]", "пациент", "учеб",
         "##нов", "алексей", ",", "45", "лет", ".", "осмотр",
     ]
-    path = tmp_path / "vocab.txt"
-    path.write_text("\n".join(vocabulary), encoding="utf-8")
-    return BertTokenizerFast(vocab_file=str(path), do_lower_case=True)
+    return BertTokenizerFast(
+        vocab={token: index for index, token in enumerate(vocabulary)},
+        do_lower_case=True,
+    )
 
 
 def test_encoding_restores_original_entity_spans(tokenizer, notebook_scope):
@@ -115,25 +117,24 @@ def test_notebook_training_and_checkpoint(tokenizer, notebook_scope, tmp_path):
         render_record("Пациент {NAME}, {AGE}.", {"NAME": "Учебнов Алексей", "AGE": "45 лет"}),
         render_record("Осмотр.", {}),
     ]
-    frozen_before = {key: value.clone() for key, value in model.base_model.state_dict().items()}
+    base_before = model.base_model.embeddings.word_embeddings.weight.detach().clone()
     head_before = model.classifier.weight.detach().clone()
     config = {
         "max_length": 64, "batch_size": 2, "seed": 42, "epochs": 2,
-        "learning_rate": 0.001, "weight_decay": 0.01,
+        "learning_rate": 0.001, "weight_decay": 0.01, "max_grad_norm": 1.0,
     }
-    metrics, predictions, history, epoch = notebook_scope["train_head"](
-        model, tokenizer, records, records, config, torch.device("cpu"),
+    checkpoint = tmp_path / "checkpoint"
+    metrics, predictions, history, epoch = notebook_scope["train_model"](
+        model, tokenizer, records, records, config, torch.device("cpu"), checkpoint,
     )
     assert len(predictions) == len(records)
     assert len(history) == config["epochs"]
     best_score = max(row["validation_micro_f1"] for row in history)
     assert epoch == next(row["epoch"] for row in history if row["validation_micro_f1"] == best_score)
     assert 0 <= metrics["micro"]["f1"] <= 1
-    assert not torch.equal(model.classifier.weight, head_before)
-    assert all(torch.equal(value, frozen_before[key]) for key, value in model.base_model.state_dict().items())
-    checkpoint = tmp_path / "checkpoint"
-    model.save_pretrained(checkpoint)
     restored = BertForTokenClassification.from_pretrained(checkpoint, local_files_only=True)
+    assert not torch.equal(restored.classifier.weight, head_before)
+    assert not torch.equal(restored.base_model.embeddings.word_embeddings.weight, base_before)
     encoded = [encode_record(record, tokenizer, 64) for record in records]
     loader = notebook_scope["make_loader"]([item[0] for item in encoded], tokenizer, config)
     restored_metrics, restored_predictions = notebook_scope["evaluate_model"](
